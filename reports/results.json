@@ -1,0 +1,25 @@
+{
+  "tests": [
+    {
+      "name": "audyt wcag[strona-logowania]",
+      "category": "Dostępność",
+      "status": "passed",
+      "duration": 0.8,
+      "violations": 0
+    },
+    {
+      "name": "audyt wcag[lista-produktow]",
+      "category": "Dostępność",
+      "status": "passed",
+      "duration": 1.11,
+      "violations": 0
+    },
+    {
+      "name": "audyt wykrywa bledy na zepsutej stronie",
+      "category": "Dostępność",
+      "status": "passed",
+      "duration": 0.39,
+      "violations": 5
+    }
+  ]
+}

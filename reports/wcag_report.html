@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="pl"><head><meta charset="utf-8"><title>Raport dostępności WCAG</title>
+<style>
+ body { font-family: Arial, sans-serif; margin: 2rem; background: #f4f6f8; color: #222; }
+ table { width: 100%; border-collapse: collapse; background: #fff; margin-bottom: 2rem; }
+ th, td { padding: .6rem; text-align: left; border-bottom: 1px solid #ddd; vertical-align: top; }
+ code { font-size: .85rem; } .ok { color: #1a7f37; font-weight: bold; }
+</style></head><body>
+<h1>Raport dostępności WCAG</h1>
+<p>Zakres: WCAG 2.0 i 2.1, poziomy A i AA (axe-core).</p>
+<h2>lista-produktow (naruszeń: 0)</h2><p class='ok'>Brak naruszeń.</p><h2>strona-logowania (naruszeń: 0)</h2><p class='ok'>Brak naruszeń.</p><h2>zepsuta-strona (naruszeń: 5)</h2><table><tr><th>Waga</th><th>Reguła</th><th>Problem</th><th>Elementy</th></tr><tr><td style='color:#b71c1c;font-weight:bold'>critical</td><td>button-name</td><td>Buttons must have discernible text<br><a href='https://dequeuniversity.com/rules/axe/4.10/button-name?application=axeAPI'>Opis reguły</a></td><td>1<ul><li><code>&lt;button&gt;&lt;/button&gt;</code></li></ul></td></tr><tr><td style='color:#e65100;font-weight:bold'>serious</td><td>color-contrast</td><td>Elements must meet minimum color contrast ratio thresholds<br><a href='https://dequeuniversity.com/rules/axe/4.10/color-contrast?application=axeAPI'>Opis reguły</a></td><td>1<ul><li><code>&lt;p style=&quot;color:#bbb;background:#fff&quot;&gt;Tekst o zbyt niskim kontraście&lt;/p&gt;</code></li></ul></td></tr><tr><td style='color:#e65100;font-weight:bold'>serious</td><td>document-title</td><td>Documents must have &lt;title&gt; element to aid in navigation<br><a href='https://dequeuniversity.com/rules/axe/4.10/document-title?application=axeAPI'>Opis reguły</a></td><td>1<ul><li><code>&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Strona testowa z błędami dostępności&lt;/h1&gt;
+  &lt;img src=&quot;brak.png&quot;&gt;
+  &lt;button&gt;&lt;/button&gt;
+  &lt;p style</code></li></ul></td></tr><tr><td style='color:#e65100;font-weight:bold'>serious</td><td>html-has-lang</td><td>&lt;html&gt; element must have a lang attribute<br><a href='https://dequeuniversity.com/rules/axe/4.10/html-has-lang?application=axeAPI'>Opis reguły</a></td><td>1<ul><li><code>&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Strona testowa z błędami dostępności&lt;/h1&gt;
+  &lt;img src=&quot;brak.png&quot;&gt;
+  &lt;button&gt;&lt;/button&gt;
+  &lt;p style</code></li></ul></td></tr><tr><td style='color:#b71c1c;font-weight:bold'>critical</td><td>image-alt</td><td>Images must have alternative text<br><a href='https://dequeuniversity.com/rules/axe/4.10/image-alt?application=axeAPI'>Opis reguły</a></td><td>1<ul><li><code>&lt;img src=&quot;brak.png&quot;&gt;</code></li></ul></td></tr></table>
+</body></html>

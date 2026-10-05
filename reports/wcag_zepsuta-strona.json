@@ -1,0 +1,289 @@
+[
+  {
+    "description": "Ensure buttons have discernible text",
+    "help": "Buttons must have discernible text",
+    "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/button-name?application=axeAPI",
+    "id": "button-name",
+    "impact": "critical",
+    "nodes": [
+      {
+        "all": [],
+        "any": [
+          {
+            "data": null,
+            "id": "button-has-visible-text",
+            "impact": "critical",
+            "message": "Element does not have inner text that is visible to screen readers",
+            "relatedNodes": []
+          },
+          {
+            "data": null,
+            "id": "aria-label",
+            "impact": "critical",
+            "message": "aria-label attribute does not exist or is empty",
+            "relatedNodes": []
+          },
+          {
+            "data": null,
+            "id": "aria-labelledby",
+            "impact": "critical",
+            "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty",
+            "relatedNodes": []
+          },
+          {
+            "data": {
+              "messageKey": "noAttr"
+            },
+            "id": "non-empty-title",
+            "impact": "critical",
+            "message": "Element has no title attribute",
+            "relatedNodes": []
+          },
+          {
+            "data": null,
+            "id": "implicit-label",
+            "impact": "critical",
+            "message": "Element does not have an implicit (wrapped) <label>",
+            "relatedNodes": []
+          },
+          {
+            "data": null,
+            "id": "explicit-label",
+            "impact": "critical",
+            "message": "Element does not have an explicit <label>",
+            "relatedNodes": []
+          },
+          {
+            "data": null,
+            "id": "presentational-role",
+            "impact": "critical",
+            "message": "Element's default semantics were not overridden with role=\"none\" or role=\"presentation\"",
+            "relatedNodes": []
+          }
+        ],
+        "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\"",
+        "html": "<button></button>",
+        "impact": "critical",
+        "none": [],
+        "target": [
+          "button"
+        ]
+      }
+    ],
+    "tags": [
+      "cat.name-role-value",
+      "wcag2a",
+      "wcag412",
+      "section508",
+      "section508.22.a",
+      "TTv5",
+      "TT6.a",
+      "EN-301-549",
+      "EN-9.4.1.2",
+      "ACT"
+    ]
+  },
+  {
+    "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/color-contrast?application=axeAPI",
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": [
+      {
+        "all": [],
+        "any": [
+          {
+            "data": {
+              "bgColor": "#ffffff",
+              "contrastRatio": 1.91,
+              "expectedContrastRatio": "4.5:1",
+              "fgColor": "#bbbbbb",
+              "fontSize": "12.0pt (16px)",
+              "fontWeight": "normal",
+              "messageKey": null,
+              "shadowColor": null
+            },
+            "id": "color-contrast",
+            "impact": "serious",
+            "message": "Element has insufficient color contrast of 1.91 (foreground color: #bbbbbb, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",
+            "relatedNodes": [
+              {
+                "html": "<p style=\"color:#bbb;background:#fff\">Tekst o zbyt niskim kontraście</p>",
+                "target": [
+                  "p"
+                ]
+              }
+            ]
+          }
+        ],
+        "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 1.91 (foreground color: #bbbbbb, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",
+        "html": "<p style=\"color:#bbb;background:#fff\">Tekst o zbyt niskim kontraście</p>",
+        "impact": "serious",
+        "none": [],
+        "target": [
+          "p"
+        ]
+      }
+    ],
+    "tags": [
+      "cat.color",
+      "wcag2aa",
+      "wcag143",
+      "TTv5",
+      "TT13.c",
+      "EN-301-549",
+      "EN-9.1.4.3",
+      "ACT"
+    ]
+  },
+  {
+    "description": "Ensure each HTML document contains a non-empty <title> element",
+    "help": "Documents must have <title> element to aid in navigation",
+    "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/document-title?application=axeAPI",
+    "id": "document-title",
+    "impact": "serious",
+    "nodes": [
+      {
+        "all": [],
+        "any": [
+          {
+            "data": null,
+            "id": "doc-has-title",
+            "impact": "serious",
+            "message": "Document does not have a non-empty <title> element",
+            "relatedNodes": []
+          }
+        ],
+        "failureSummary": "Fix any of the following:\n  Document does not have a non-empty <title> element",
+        "html": "<html><head><meta charset=\"utf-8\"></head>\n<body>\n  <h1>Strona testowa z błędami dostępności</h1>\n  <img src=\"brak.png\">\n  <button></button>\n  <p style=\"color:#bbb;background:#fff\">Tekst o zbyt niskim kontraście</p>\n\n</body></html>",
+        "impact": "serious",
+        "none": [],
+        "target": [
+          "html"
+        ]
+      }
+    ],
+    "tags": [
+      "cat.text-alternatives",
+      "wcag2a",
+      "wcag242",
+      "TTv5",
+      "TT12.a",
+      "EN-301-549",
+      "EN-9.2.4.2",
+      "ACT"
+    ]
+  },
+  {
+    "description": "Ensure every HTML document has a lang attribute",
+    "help": "<html> element must have a lang attribute",
+    "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/html-has-lang?application=axeAPI",
+    "id": "html-has-lang",
+    "impact": "serious",
+    "nodes": [
+      {
+        "all": [],
+        "any": [
+          {
+            "data": {
+              "messageKey": "noLang"
+            },
+            "id": "has-lang",
+            "impact": "serious",
+            "message": "The <html> element does not have a lang attribute",
+            "relatedNodes": []
+          }
+        ],
+        "failureSummary": "Fix any of the following:\n  The <html> element does not have a lang attribute",
+        "html": "<html><head><meta charset=\"utf-8\"></head>\n<body>\n  <h1>Strona testowa z błędami dostępności</h1>\n  <img src=\"brak.png\">\n  <button></button>\n  <p style=\"color:#bbb;background:#fff\">Tekst o zbyt niskim kontraście</p>\n\n</body></html>",
+        "impact": "serious",
+        "none": [],
+        "target": [
+          "html"
+        ]
+      }
+    ],
+    "tags": [
+      "cat.language",
+      "wcag2a",
+      "wcag311",
+      "TTv5",
+      "TT11.a",
+      "EN-301-549",
+      "EN-9.3.1.1",
+      "ACT"
+    ]
+  },
+  {
+    "description": "Ensure <img> elements have alternative text or a role of none or presentation",
+    "help": "Images must have alternative text",
+    "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/image-alt?application=axeAPI",
+    "id": "image-alt",
+    "impact": "critical",
+    "nodes": [
+      {
+        "all": [],
+        "any": [
+          {
+            "data": null,
+            "id": "has-alt",
+            "impact": "critical",
+            "message": "Element does not have an alt attribute",
+            "relatedNodes": []
+          },
+          {
+            "data": null,
+            "id": "aria-label",
+            "impact": "critical",
+            "message": "aria-label attribute does not exist or is empty",
+            "relatedNodes": []
+          },
+          {
+            "data": null,
+            "id": "aria-labelledby",
+            "impact": "critical",
+            "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty",
+            "relatedNodes": []
+          },
+          {
+            "data": {
+              "messageKey": "noAttr"
+            },
+            "id": "non-empty-title",
+            "impact": "critical",
+            "message": "Element has no title attribute",
+            "relatedNodes": []
+          },
+          {
+            "data": null,
+            "id": "presentational-role",
+            "impact": "critical",
+            "message": "Element's default semantics were not overridden with role=\"none\" or role=\"presentation\"",
+            "relatedNodes": []
+          }
+        ],
+        "failureSummary": "Fix any of the following:\n  Element does not have an alt attribute\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\"",
+        "html": "<img src=\"brak.png\">",
+        "impact": "critical",
+        "none": [],
+        "target": [
+          "img"
+        ]
+      }
+    ],
+    "tags": [
+      "cat.text-alternatives",
+      "wcag2a",
+      "wcag111",
+      "section508",
+      "section508.22.a",
+      "TTv5",
+      "TT7.a",
+      "TT7.b",
+      "EN-301-549",
+      "EN-9.1.1.1",
+      "ACT"
+    ]
+  }
+]
