@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard testów</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; background: #f4f6f8; color: #222; }
+    .kpi { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
+    .card { background: #fff; padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 1px 3px #0003; min-width: 150px; }
+    .card b { display: block; font-size: 2rem; }
+    table { width: 100%; border-collapse: collapse; background: #fff; }
+    th, td { padding: .6rem; text-align: left; border-bottom: 1px solid #ddd; }
+    .passed { color: #1a7f37; font-weight: bold; }
+    .failed { color: #c62828; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Dashboard testów</h1>
+
+  <div class="kpi">
+    <div class="card"><b>{{ kpi.total }}</b>Liczba testów</div>
+    <div class="card"><b>{{ kpi.passed_pct }}%</b>Zaliczone</div>
+    <div class="card"><b>{{ kpi.failed }}</b>Błędy</div>
+    <div class="card"><b>{{ kpi.duration }} s</b>Czas wykonania</div>
+    <div class="card"><b>{{ kpi.violations }}</b>Naruszenia WCAG</div>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>Test</th><th>Kategoria</th><th>Status</th><th>Czas (s)</th></tr>
+    </thead>
+    <tbody>
+      {% for t in tests %}
+      <tr>
+        <td>{{ t.name }}</td>
+        <td>{{ t.category }}</td>
+        <td class="{{ t.status }}">{{ "Zaliczony" if t.status == "passed" else "Błąd" }}</td>
+        <td>{{ t.duration }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>

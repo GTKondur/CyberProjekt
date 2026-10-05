@@ -1,0 +1,12 @@
+{
+  "tests": [
+    {"name": "Logowanie poprawne", "category": "UI", "status": "passed", "duration": 2.1},
+    {"name": "Logowanie błędne hasło", "category": "UI", "status": "passed", "duration": 1.8},
+    {"name": "Dodanie produktu do koszyka", "category": "UI", "status": "failed", "duration": 3.4},
+    {"name": "Lista użytkowników API", "category": "API", "status": "passed", "duration": 0.4},
+    {"name": "Logowanie API zwraca token", "category": "API", "status": "passed", "duration": 0.5},
+    {"name": "Audyt WCAG strony głównej", "category": "Dostępność", "status": "failed", "duration": 4.2, "violations": 7},
+    {"name": "Dostęp bez tokena", "category": "Bezpieczeństwo", "status": "passed", "duration": 0.3},
+    {"name": "Dziwne dane wejściowe", "category": "Bezpieczeństwo", "status": "passed", "duration": 0.6}
+  ]
+}
