@@ -1,0 +1,126 @@
+{
+  "tests": [
+    {
+      "name": "audyt wcag[strona-logowania]",
+      "category": "Dostępność",
+      "status": "passed",
+      "duration": 0.89,
+      "violations": 0
+    },
+    {
+      "name": "audyt wcag[lista-produktow]",
+      "category": "Dostępność",
+      "status": "passed",
+      "duration": 1.24,
+      "violations": 0
+    },
+    {
+      "name": "audyt wykrywa bledy na zepsutej stronie",
+      "category": "Dostępność",
+      "status": "passed",
+      "duration": 0.42
+    },
+    {
+      "name": "lista uzytkownikow",
+      "category": "API",
+      "status": "passed",
+      "duration": 0.53
+    },
+    {
+      "name": "pojedynczy uzytkownik",
+      "category": "API",
+      "status": "passed",
+      "duration": 0.42
+    },
+    {
+      "name": "nieistniejacy uzytkownik",
+      "category": "API",
+      "status": "passed",
+      "duration": 0.42
+    },
+    {
+      "name": "czas odpowiedzi",
+      "category": "API",
+      "status": "passed",
+      "duration": 0.41
+    },
+    {
+      "name": "login zwraca token",
+      "category": "API",
+      "status": "passed",
+      "duration": 0.41
+    },
+    {
+      "name": "login bledne haslo",
+      "category": "API",
+      "status": "passed",
+      "duration": 0.41
+    },
+    {
+      "name": "me z tokenem",
+      "category": "API",
+      "status": "passed",
+      "duration": 0.43
+    },
+    {
+      "name": "me bez tokena",
+      "category": "API",
+      "status": "passed",
+      "duration": 0.48
+    },
+    {
+      "name": "me zly token",
+      "category": "API",
+      "status": "passed",
+      "duration": 0.42
+    },
+    {
+      "name": "lista produktow",
+      "category": "UI",
+      "status": "passed",
+      "duration": 0.01
+    },
+    {
+      "name": "dodanie do koszyka zwieksza licznik",
+      "category": "UI",
+      "status": "passed",
+      "duration": 0.1
+    },
+    {
+      "name": "produkt widoczny w koszyku",
+      "category": "UI",
+      "status": "passed",
+      "duration": 0.19
+    },
+    {
+      "name": "usuniecie z koszyka",
+      "category": "UI",
+      "status": "passed",
+      "duration": 0.14
+    },
+    {
+      "name": "login poprawne dane",
+      "category": "UI",
+      "status": "passed",
+      "duration": 0.7
+    },
+    {
+      "name": "login bledne haslo",
+      "category": "UI",
+      "status": "passed",
+      "duration": 0.68
+    },
+    {
+      "name": "login uzytkownik zablokowany",
+      "category": "UI",
+      "status": "passed",
+      "duration": 0.58
+    },
+    {
+      "name": "login puste pola",
+      "category": "UI",
+      "status": "passed",
+      "duration": 0.65
+    }
+  ]
+}
