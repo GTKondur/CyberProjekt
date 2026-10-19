@@ -1,13 +1,24 @@
 import pytest
 import requests
 
-BASE = "https://dummyjson.com"
-USER = {"username": "emilys", "password": "emilyspass"}
+
+@pytest.fixture(scope="session")
+def api_config(request):
+    from webtests.api_config import load_api_config
+
+    return load_api_config(request.config.getoption("--api-config"))
 
 
 @pytest.fixture(scope="session")
-def token():
-    
-    r = requests.post(f"{BASE}/auth/login", json=USER, timeout=10)
-    assert r.status_code == 200, "Logowanie nie powiodło się, sprawdź dane testowe"
-    return r.json()["accessToken"]
+def token(api_config):
+    from webtests.api_config import api_url
+
+    response = requests.post(
+        api_url(api_config, "login"),
+        json=api_config["credentials"],
+        timeout=api_config["requests"]["timeout_seconds"],
+    )
+    assert response.status_code == api_config["expected"]["success_status"], (
+        f"Logowanie nie powiodło się: HTTP {response.status_code}."
+    )
+    return response.json()["accessToken"]

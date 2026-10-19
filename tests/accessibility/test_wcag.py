@@ -1,4 +1,5 @@
 import json
+from urllib.parse import urljoin
 from pathlib import Path
 
 import pytest
@@ -7,11 +8,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 HERE = Path(__file__).parent
+ROOT = HERE.parent.parent
 AXE = (HERE / "axe.min.js").read_text(encoding="utf-8")
-BROKEN_PAGE = (HERE / "zepsuta.html").as_uri()
 REPORTS = HERE.parent.parent / "reports"
-URL = "https://www.saucedemo.com/"
-TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]
 
 RUN_AXE = """
 const done = arguments[arguments.length - 1];
@@ -21,11 +20,22 @@ axe.run(document, {runOnly: {type: 'tag', values: arguments[0]}})
 """
 
 
-def audit(driver, page):
+def load_wcag_config(path):
+    config = json.loads(Path(path).read_text(encoding="utf-8"))
+    if not isinstance(config.get("base_url"), str):
+        raise ValueError("WCAG config requires a base_url.")
+    if not isinstance(config.get("axe_tags"), list) or not config["axe_tags"]:
+        raise ValueError("WCAG config requires a non-empty axe_tags list.")
+    if not isinstance(config.get("pages"), list) or not config["pages"]:
+        raise ValueError("WCAG config requires a non-empty pages list.")
+    return config
+
+
+def audit(driver, page, tags):
     """Uruchamia axe na otwartej stronie, zapisuje JSON i zwraca listę naruszeń."""
     driver.set_script_timeout(30)
     driver.execute_script(AXE)
-    result = driver.execute_async_script(RUN_AXE, TAGS)
+    result = driver.execute_async_script(RUN_AXE, tags)
     assert "error" not in result, result.get("error")
     violations = result["violations"]
 
@@ -37,32 +47,52 @@ def audit(driver, page):
     return violations
 
 
-def open_login(driver):
-    driver.get(URL)
+def open_configured_page(driver, page, config):
+    if page["type"] == "local":
+        driver.get((ROOT / page["path"]).resolve().as_uri())
+        return
+    if page["type"] != "web":
+        raise ValueError(f"Unsupported page type: {page['type']}")
+
+    driver.get(urljoin(config["base_url"], page["path"]))
+    if page.get("login_required"):
+        login = config["login"]
+        for key in ("username_locator", "password_locator", "submit_locator"):
+            locator = login[key]
+            if locator.get("by") != "id":
+                raise ValueError(f"Unsupported login locator type: {locator.get('by')}")
+        driver.find_element(By.ID, login["username_locator"]["value"]).send_keys(
+            login["username"]
+        )
+        driver.find_element(By.ID, login["password_locator"]["value"]).send_keys(
+            login["password"]
+        )
+        driver.find_element(By.ID, login["submit_locator"]["value"]).click()
+        WebDriverWait(driver, config["browser"]["timeout_seconds"]).until(
+            EC.url_contains(login["success_url_contains"])
+        )
 
 
-def open_inventory(driver):
-    driver.get(URL)
-    driver.find_element(By.ID, "user-name").send_keys("standard_user")
-    driver.find_element(By.ID, "password").send_keys("secret_sauce")
-    driver.find_element(By.ID, "login-button").click()
-    WebDriverWait(driver, 5).until(EC.url_contains("inventory"))
+def pytest_generate_tests(metafunc):
+    if "wcag_page" not in metafunc.fixturenames:
+        return
+    config_path = metafunc.config.getoption("--wcag-config")
+    config = load_wcag_config(config_path)
+    metafunc.parametrize(
+        "wcag_page",
+        config["pages"],
+        ids=[page["name"] for page in config["pages"]],
+    )
 
 
-@pytest.mark.parametrize("opener", [
-    pytest.param(open_login, id="strona-logowania"),
-    pytest.param(open_inventory, id="lista-produktow"),
-])
-def test_audyt_wcag(driver, record_property, opener, request):
-    opener(driver)
-    violations = audit(driver, request.node.callspec.id)
+def test_audyt_wcag(driver, record_property, wcag_page, request):
+    config = load_wcag_config(request.config.getoption("--wcag-config"))
+    open_configured_page(driver, wcag_page, config)
+    violations = audit(driver, wcag_page["id"], config["axe_tags"])
     record_property("violations", len(violations))
-    assert not violations, f"Znaleziono naruszeń WCAG: {len(violations)}"
-
-
-def test_audyt_wykrywa_bledy_na_zepsutej_stronie(driver):
-   
-    driver.get(BROKEN_PAGE)
-    violations = audit(driver, "zepsuta-strona")
-    found = {v["id"] for v in violations}
-    assert {"image-alt", "button-name"} <= found
+    found = {violation["id"] for violation in violations}
+    expected = set(wcag_page["expected_violation_ids"])
+    if expected:
+        assert expected <= found, f"Expected WCAG violations {expected}, found {found}."
+    else:
+        assert not violations, f"Znaleziono naruszeń WCAG: {len(violations)}"

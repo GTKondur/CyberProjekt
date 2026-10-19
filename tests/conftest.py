@@ -4,12 +4,36 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-SCREENSHOTS = Path(__file__).parent.parent / "reports" / "screenshots"
+ROOT = Path(__file__).parent.parent
+SCREENSHOTS = ROOT / "reports" / "screenshots"
 
 
 def pytest_addoption(parser):
     parser.addoption("--headless", action="store_true",
-                     help="Uruchom przeglądarkę bez okna")
+                     default=None, help="Uruchom przeglądarkę bez okna")
+    parser.addoption(
+        "--webtest-config",
+        help="JSON file containing configurable browser tests",
+    )
+    parser.addoption(
+        "--webtest-url",
+        help="Override the base URL in the web-test configuration",
+    )
+    parser.addoption(
+        "--wcag-config",
+        default=str(ROOT / "configs" / "accessibility.json"),
+        help="JSON file with WCAG audit settings",
+    )
+    parser.addoption(
+        "--api-config",
+        default=str(ROOT / "configs" / "api.json"),
+        help="JSON file with API test settings",
+    )
+    parser.addoption(
+        "--results-file",
+        default=str(ROOT / "reports" / "results.json"),
+        help="Path to the JSON test-results report",
+    )
 
 
 @pytest.hookimpl(hookwrapper=True)
@@ -23,7 +47,20 @@ def pytest_runtest_makereport(item, call):
 @pytest.fixture
 def driver(request):
     options = Options()
-    if request.config.getoption("--headless"):
+    config_path = request.config.getoption("--webtest-config")
+    config_browser = {}
+    if config_path:
+        from webtests.config import load_config
+
+        config_browser = load_config(config_path)["browser"]
+    elif request.node.path.is_relative_to(ROOT / "tests" / "accessibility"):
+        import json
+
+        wcag_config_path = Path(request.config.getoption("--wcag-config"))
+        wcag_config = json.loads(wcag_config_path.read_text(encoding="utf-8"))
+        config_browser = wcag_config["browser"]
+    headless = request.config.getoption("--headless")
+    if headless is True or (headless is None and config_browser.get("headless", False)):
         options.add_argument("--headless=new")
     options.add_argument("--window-size=1280,900")
     options.add_experimental_option("prefs", {
@@ -32,24 +69,26 @@ def driver(request):
         "profile.password_manager_leak_detection": False,
     })
     drv = webdriver.Chrome(options=options)
-    yield drv  
-
-    
-    rep = getattr(request.node, "rep_call", None)
-    if rep is not None and rep.failed:
-        SCREENSHOTS.mkdir(parents=True, exist_ok=True)
-        drv.save_screenshot(str(SCREENSHOTS / f"{request.node.name}.png"))
-    drv.quit()
+    try:
+        yield drv
+    finally:
+        try:
+            rep = getattr(request.node, "rep_call", None)
+            if rep is not None and rep.failed:
+                SCREENSHOTS.mkdir(parents=True, exist_ok=True)
+                drv.save_screenshot(str(SCREENSHOTS / f"{request.node.name}.png"))
+        finally:
+            drv.quit()
 
     
 import json
 
-RESULTS_FILE = Path(__file__).parent.parent / "reports" / "results.json"
 CATEGORIES = {
     "ui": "UI",
     "api": "API",
     "accessibility": "Dostępność",
     "security": "Bezpieczeństwo",
+    "config_driven": "Konfigurowalne",
 }
 _results = []
 
@@ -72,9 +111,9 @@ def pytest_runtest_logreport(report):
 
 
 def pytest_sessionfinish(session, exitstatus):
-    if _results:
-        RESULTS_FILE.parent.mkdir(parents=True, exist_ok=True)
-        RESULTS_FILE.write_text(
-            json.dumps({"tests": _results}, ensure_ascii=False, indent=2),
-            encoding="utf-8",
-        )
+    results_file = Path(session.config.getoption("--results-file"))
+    results_file.parent.mkdir(parents=True, exist_ok=True)
+    results_file.write_text(
+        json.dumps({"tests": _results}, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )

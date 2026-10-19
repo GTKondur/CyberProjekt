@@ -1,0 +1,87 @@
+{
+  "name": "Sauce Demo UI",
+  "base_url": "https://www.saucedemo.com/",
+  "browser": {
+    "headless": true,
+    "timeout_seconds": 5
+  },
+  "tests": [
+    {
+      "name": "Valid login opens inventory",
+      "steps": [
+        { "action": "type", "by": "id", "value": "user-name", "text": "standard_user" },
+        { "action": "type", "by": "id", "value": "password", "text": "secret_sauce" },
+        { "action": "click", "by": "id", "value": "login-button" },
+        { "action": "assert_url_contains", "value": "inventory" },
+        { "action": "assert_visible", "by": "class_name", "value": "inventory_item" }
+      ]
+    },
+    {
+      "name": "Invalid password shows an error",
+      "steps": [
+        { "action": "type", "by": "id", "value": "user-name", "text": "standard_user" },
+        { "action": "type", "by": "id", "value": "password", "text": "incorrect" },
+        { "action": "click", "by": "id", "value": "login-button" },
+        { "action": "assert_text_contains", "by": "css_selector", "value": "[data-test='error']", "text": "do not match" }
+      ]
+    },
+    {
+      "name": "Locked user sees an error",
+      "steps": [
+        { "action": "type", "by": "id", "value": "user-name", "text": "locked_out_user" },
+        { "action": "type", "by": "id", "value": "password", "text": "secret_sauce" },
+        { "action": "click", "by": "id", "value": "login-button" },
+        { "action": "assert_text_contains", "by": "css_selector", "value": "[data-test='error']", "text": "locked out" }
+      ]
+    },
+    {
+      "name": "Empty login fields show an error",
+      "steps": [
+        { "action": "click", "by": "id", "value": "login-button" },
+        { "action": "assert_text_contains", "by": "css_selector", "value": "[data-test='error']", "text": "Username is required" }
+      ]
+    },
+    {
+      "name": "Inventory displays six products",
+      "steps": [
+        { "action": "type", "by": "id", "value": "user-name", "text": "standard_user" },
+        { "action": "type", "by": "id", "value": "password", "text": "secret_sauce" },
+        { "action": "click", "by": "id", "value": "login-button" },
+        { "action": "assert_count", "by": "class_name", "value": "inventory_item", "count": 6 }
+      ]
+    },
+    {
+      "name": "Adding a product updates the cart badge",
+      "steps": [
+        { "action": "type", "by": "id", "value": "user-name", "text": "standard_user" },
+        { "action": "type", "by": "id", "value": "password", "text": "secret_sauce" },
+        { "action": "click", "by": "id", "value": "login-button" },
+        { "action": "click", "by": "id", "value": "add-to-cart-sauce-labs-backpack" },
+        { "action": "assert_text_contains", "by": "class_name", "value": "shopping_cart_badge", "text": "1" }
+      ]
+    },
+    {
+      "name": "Added product appears in the cart",
+      "steps": [
+        { "action": "type", "by": "id", "value": "user-name", "text": "standard_user" },
+        { "action": "type", "by": "id", "value": "password", "text": "secret_sauce" },
+        { "action": "click", "by": "id", "value": "login-button" },
+        { "action": "click", "by": "id", "value": "add-to-cart-sauce-labs-backpack" },
+        { "action": "click", "by": "class_name", "value": "shopping_cart_link" },
+        { "action": "assert_url_contains", "value": "cart" },
+        { "action": "assert_text_contains", "by": "class_name", "value": "inventory_item_name", "text": "Sauce Labs Backpack" }
+      ]
+    },
+    {
+      "name": "Removing a product clears the cart badge",
+      "steps": [
+        { "action": "type", "by": "id", "value": "user-name", "text": "standard_user" },
+        { "action": "type", "by": "id", "value": "password", "text": "secret_sauce" },
+        { "action": "click", "by": "id", "value": "login-button" },
+        { "action": "click", "by": "id", "value": "add-to-cart-sauce-labs-backpack" },
+        { "action": "click", "by": "id", "value": "remove-sauce-labs-backpack" },
+        { "action": "assert_not_visible", "by": "class_name", "value": "shopping_cart_badge" }
+      ]
+    }
+  ]
+}

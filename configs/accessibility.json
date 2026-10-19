@@ -1,0 +1,61 @@
+{
+  "kind": "accessibility",
+  "name": "Sauce Demo accessibility",
+  "base_url": "https://www.saucedemo.com/",
+  "browser": {
+    "headless": true,
+    "timeout_seconds": 5
+  },
+  "axe_tags": [
+    "wcag2a",
+    "wcag2aa",
+    "wcag21a",
+    "wcag21aa"
+  ],
+  "login": {
+    "username": "standard_user",
+    "password": "secret_sauce",
+    "username_locator": {
+      "by": "id",
+      "value": "user-name"
+    },
+    "password_locator": {
+      "by": "id",
+      "value": "password"
+    },
+    "submit_locator": {
+      "by": "id",
+      "value": "login-button"
+    },
+    "success_url_contains": "inventory"
+  },
+  "pages": [
+    {
+      "id": "login",
+      "name": "strona-logowania",
+      "type": "web",
+      "path": "/",
+      "login_required": false,
+      "expected_violation_ids": []
+    },
+    {
+      "id": "inventory",
+      "name": "lista-produktow",
+      "type": "web",
+      "path": "/",
+      "login_required": true,
+      "expected_violation_ids": []
+    },
+    {
+      "id": "broken-page",
+      "name": "zepsuta-strona",
+      "type": "local",
+      "path": "tests/accessibility/zepsuta.html",
+      "login_required": false,
+      "expected_violation_ids": [
+        "image-alt",
+        "button-name"
+      ]
+    }
+  ]
+}

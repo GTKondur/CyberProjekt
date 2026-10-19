@@ -13,10 +13,35 @@
     th, td { padding: .6rem; text-align: left; border-bottom: 1px solid #ddd; }
     .passed { color: #1a7f37; font-weight: bold; }
     .failed { color: #c62828; font-weight: bold; }
+    .runner { background: #fff; padding: 1rem 1.5rem; border-radius: 8px; margin-bottom: 2rem; }
+    .runner label { margin-right: .5rem; }
+    .runner input, .runner select, .runner button { padding: .5rem; margin: .35rem; }
+    #run-log { white-space: pre-wrap; overflow: auto; max-height: 20rem; background: #171923; color: #eee; padding: 1rem; }
   </style>
 </head>
 <body>
   <h1>Dashboard testów</h1>
+
+  <section class="runner">
+    <h2>Uruchom testy</h2>
+    <form id="run-form">
+      <label for="target">Zestaw testów</label>
+      <select id="target" name="target" required>
+        <option value="api">Testy API — api.json</option>
+        <option value="accessibility">Testy accessibility (WCAG)</option>
+        {% for config in configs %}
+        <option value="config:{{ config }}">Testy przeglądarkowe — {{ config }}</option>
+        {% endfor %}
+      </select>
+      <span id="base-url-control" hidden>
+        <label for="base-url">Nadpisz adres (opcjonalnie)</label>
+        <input id="base-url" name="base_url" type="url" placeholder="https://example.com">
+      </span>
+      <button id="run-button" type="submit">Uruchom pytest</button>
+    </form>
+    <p id="run-status" role="status">Wybierz zestaw testów i uruchom pytest. Testy API wymagają połączenia z internetem.</p>
+    <pre id="run-log" aria-live="polite"></pre>
+  </section>
 
   <div class="kpi">
     <div class="card"><b>{{ kpi.total }}</b>Liczba testów</div>
@@ -41,5 +66,58 @@
       {% endfor %}
     </tbody>
   </table>
+  <script>
+    const form = document.getElementById("run-form");
+    const button = document.getElementById("run-button");
+    const status = document.getElementById("run-status");
+    const log = document.getElementById("run-log");
+    const target = document.getElementById("target");
+    const baseUrlControl = document.getElementById("base-url-control");
+    let polling;
+
+    function updateTargetFields() {
+      baseUrlControl.hidden = !target.value.startsWith("config:");
+    }
+    target.addEventListener("change", updateTargetFields);
+    updateTargetFields();
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      button.disabled = true;
+      log.textContent = "";
+      status.textContent = "Uruchamianie...";
+      const response = await fetch("/run", { method: "POST", body: new FormData(form) });
+      const result = await response.json();
+      if (!response.ok) {
+        status.textContent = result.error || "Nie udało się uruchomić testów.";
+        button.disabled = false;
+        return;
+      }
+      window.clearInterval(polling);
+      polling = window.setInterval(updateRun, 700);
+      updateRun();
+    });
+
+    async function updateRun() {
+      const response = await fetch("/run/status");
+      const result = await response.json();
+      log.textContent = result.logs || "";
+      log.scrollTop = log.scrollHeight;
+      if (result.running) {
+        status.textContent = "Testy są uruchomione...";
+        return;
+      }
+      window.clearInterval(polling);
+      button.disabled = false;
+      if (result.error) {
+        status.textContent = `Błąd uruchamiania: ${result.error}`;
+      } else {
+        status.textContent = result.returncode === 0
+          ? "Testy zakończone pomyślnie."
+          : `Testy zakończone kodem ${result.returncode}.`;
+        window.setTimeout(() => window.location.reload(), 1200);
+      }
+    }
+  </script>
 </body>
 </html>

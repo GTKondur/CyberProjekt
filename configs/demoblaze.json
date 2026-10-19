@@ -1,0 +1,38 @@
+{
+  "name": "Demoblaze Store",
+  "base_url": "https://demoblaze.com/",
+  "browser": {
+    "headless": true,
+    "timeout_seconds": 10
+  },
+  "tests": [
+    {
+      "name": "Product can be added to the cart",
+      "steps": [
+        { "action": "click", "by": "link_text", "value": "Samsung galaxy s6" },
+        { "action": "assert_text_contains", "by": "xpath", "value": "//h2", "text": "Samsung galaxy s6" },
+        { "action": "click", "by": "link_text", "value": "Add to cart" },
+        { "action": "accept_alert" },
+        { "action": "click", "by": "link_text", "value": "Cart" },
+        { "action": "assert_url_contains", "value": "cart.html" },
+        { "action": "assert_text_contains", "by": "id", "value": "tbodyid", "text": "Samsung galaxy s6" }
+      ]
+    },
+    {
+      "name": "Login dialog shows username and password fields",
+      "steps": [
+        { "action": "click", "by": "link_text", "value": "Log in" },
+        { "action": "assert_visible", "by": "id", "value": "loginusername" },
+        { "action": "assert_visible", "by": "id", "value": "loginpassword" }
+      ]
+    },
+    {
+      "name": "Sign-up dialog shows username and password fields",
+      "steps": [
+        { "action": "click", "by": "link_text", "value": "Sign up" },
+        { "action": "assert_visible", "by": "id", "value": "sign-username" },
+        { "action": "assert_visible", "by": "id", "value": "sign-password" }
+      ]
+    }
+  ]
+}

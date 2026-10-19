@@ -1,0 +1,52 @@
+{
+  "tests": [
+    {
+      "name": "load config accepts valid config and url override",
+      "category": "unit",
+      "status": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "load config rejects unknown actions",
+      "category": "unit",
+      "status": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "load config rejects non http base url",
+      "category": "unit",
+      "status": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "load config accepts alert action",
+      "category": "unit",
+      "status": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "resolve text requires environment variables",
+      "category": "unit",
+      "status": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "execute navigates to configured base url",
+      "category": "unit",
+      "status": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "execute accepts javascript alert",
+      "category": "unit",
+      "status": "passed",
+      "duration": 0.0
+    },
+    {
+      "name": "execute supports asserting zero matching elements",
+      "category": "unit",
+      "status": "passed",
+      "duration": 0.0
+    }
+  ]
+}
